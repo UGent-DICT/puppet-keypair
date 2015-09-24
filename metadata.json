@@ -1,0 +1,14 @@
+{
+  "name": "dpcops-gpg_key",
+  "version": "0.0.1",
+  "author": "dpcops",
+  "summary": "Generate gpg keys",
+  "license": "Apache-2.0",
+  "source": "ssh://git@atlas.vrt.be:7999/pup/dpcops-gpg_key.git",
+  "project_page": null,
+  "issues_url": null,
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+

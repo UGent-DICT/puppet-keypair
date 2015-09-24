@@ -1,0 +1,4 @@
+class gpg_key {
+
+
+}
