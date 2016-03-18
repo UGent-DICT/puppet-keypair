@@ -1,5 +1,7 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
+require 'rubocop/rake_task'
+
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
 
@@ -16,5 +18,9 @@ task :validate do
   end
 end
 
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.patterns = ['lib/**/*.rb', 'Rakefile', 'Gemfile']
+  task.formatters = ['fuubar']
+end
 
 task :default => :spec
