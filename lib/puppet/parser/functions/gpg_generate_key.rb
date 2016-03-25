@@ -1,4 +1,4 @@
-# rubocop:disable Documentation, Metrics/LineLength, Style/ClassAndModuleChildren
+# rubocop:disable Documentation, Style/ClassAndModuleChildren
 
 module Puppet::Parser::Functions
   newfunction(:gpg_generate_key, type: :rvalue, doc: <<-EODOC
