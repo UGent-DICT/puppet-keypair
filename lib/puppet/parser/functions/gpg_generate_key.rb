@@ -29,8 +29,7 @@ module Puppet::Parser::Functions
       end
 
       IO.popen(['gpg', '--homedir', dir, '--list-keys',
-                '--with-fingerprint', '--with-colons', '--fixed-list-mode'
-      ]) do |gpg|
+                '--with-fingerprint', '--with-colons', '--fixed-list-mode']) do |gpg|
         gpg.readlines.each do |line|
           # We just generated a single key in a new directory
           # so we don't need to track which uid belongs to which public key
