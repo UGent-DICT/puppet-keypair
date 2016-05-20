@@ -28,8 +28,13 @@ module Puppet::Parser::Functions
         raise Puppet::ParseError, 'Could not generate GPG key'
       end
 
-      IO.popen(['gpg', '--homedir', dir, '--list-keys',
-                '--with-fingerprint', '--with-colons', '--fixed-list-mode']) do |gpg|
+      # rubocop:disable Style/IndentArray, Style/AlignArray
+      IO.popen([
+        'gpg', '--homedir', dir, '--list-keys', '--with-fingerprint',
+               '--with-colons', '--fixed-list-mode'
+      ]) do |gpg|
+        # rubocop:enable Style/IndentArray, Style/AlignArray
+
         gpg.readlines.each do |line|
           # We just generated a single key in a new directory
           # so we don't need to track which uid belongs to which public key
