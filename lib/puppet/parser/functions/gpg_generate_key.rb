@@ -3,8 +3,10 @@
 module Puppet::Parser::Functions
   newfunction(:gpg_generate_key, type: :rvalue, doc: <<-EODOC
 
-        @TODO: Write documentation / example use for the function.
-
+        The gpg_generate_key function generates a new RSA GPG keypair.
+        Optional parameters:
+         * key_length
+         * uid
 
       EODOC
              ) do |args|
