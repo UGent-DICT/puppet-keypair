@@ -2,8 +2,6 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 # put local configuration and setup into spec_helper_local
-begin
-  require 'spec_helper_local'
-rescue LoadError
-  puts 'There is no spec_helper_local.rb file to load'
+if File.exist?(File.expand_path(File.dirname(__FILE__), 'spec_helper_local.rb'))
+  require_relative 'spec_helper_local'
 end

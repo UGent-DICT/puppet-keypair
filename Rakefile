@@ -43,6 +43,3 @@ Rake::Task['default'].clear
 task default: [:syntax, :lint, :rubocop, :validate]
 
 PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'pkg/**/*.pp', 'vendor/**/*.pp']
-PuppetLint.configuration.send('relative')
-PuppetLint.configuration.send('disable_documentation')
-PuppetLint.configuration.send('disable_single_quote_string_with_variables')

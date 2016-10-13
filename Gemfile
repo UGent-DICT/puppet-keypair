@@ -18,10 +18,16 @@ end
 
 group :development, :test do
   gem 'metadata-json-lint'
+  gem 'awesome_print'
   gem 'rubocop'
   gem 'rubocop-rspec'
   gem 'puppetlabs_spec_helper', '>= 1.2.1'
-  gem 'puppet-lint', '>= 1.0.0'
+  gem 'puppet-lint', '~> 2'
+end
+group :doc do
+  gem 'puppet-strings', :git => 'https://github.com/puppetlabs/puppetlabs-strings.git'
+  gem 'redcarpet'
+  gem 'rdoc'
 end
 
 gem 'facter', *location_from_env('FACTER_GEM_VERSION')
