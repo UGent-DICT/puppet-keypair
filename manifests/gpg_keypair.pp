@@ -5,7 +5,7 @@ define keypair::gpg_keypair (
 
   include gpg # To make the parent directory
 
-  $existing_key = gpg_find_key($::gpg_keys, {
+  $existing_key = find_key($::gpg_keys, {
       'secret_present' => true,
       'basename'       => $basename,
     })
