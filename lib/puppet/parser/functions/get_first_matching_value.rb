@@ -1,16 +1,16 @@
 module Puppet::Parser::Functions
-  newfunction(:find_key, type: :rvalue, doc: <<-EODOC
-    find_key(key_hash, criteria_hash)
+  newfunction(:get_first_matching_value, type: :rvalue, doc: <<-EODOC
+    get_first_matching_value(key_hash, criteria_hash)
 
     Filters key_hash, returning the first (usually only) element to match
     criteria_hash:
 
-    find_key( { one   => {a => 1, b => 2},
-                two   => {a => 1, b => 3},
-                three => {a => 2},
-              },
-              { a => 1 }
-            )
+    get_first_matching_value( { one   => {a => 1, b => 2},
+                                two   => {a => 1, b => 3},
+                                three => {a => 2},
+                              },
+                              { a => 1 }
+                            )
     returns:
     {a => 1, b => 2}
 
