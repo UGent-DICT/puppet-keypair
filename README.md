@@ -1,11 +1,12 @@
-# gpg_key
+# keypair
 
 ## Overview
 
-A module to generate OpenPGP key pairs for use with GnuPG.
+A module to generate key pairs (OpenPGP or X.509).
 
-The default manifest will make sure that at least one key pair (i.e. a public
-and private key) exist in `/etc/gpg_keys/`.
+This module differs from most other similar modules in that the key is generated
+on the *server* during catalogue compilation. Therefore, the generated key can
+immediately be exported to puppetdb, without requiring a second puppet run.
 
 ## Description
 

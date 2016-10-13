@@ -1,9 +1,9 @@
-define gpg_key::keypair (
+define keypair::gpg_keypair (
   $basename,
   $uid = nil,
 ) {
 
-  include gpg_key # To make the parent directory
+  include gpg # To make the parent directory
 
   $existing_key = gpg_find_key($::gpg_keys, {
       'secret_present' => true,

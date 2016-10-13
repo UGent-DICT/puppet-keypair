@@ -1,6 +1,4 @@
-class gpg_key(
-  $key_options = {}
-){
+class keypair::gpg {
 
   file { '/etc/gpg_keys':
     ensure => directory,
