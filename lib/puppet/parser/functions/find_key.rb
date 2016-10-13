@@ -1,5 +1,3 @@
-# rubocop:disable Style/ClassAndModuleChildren, Documentation
-
 module Puppet::Parser::Functions
   newfunction(:find_key, type: :rvalue, doc: <<-EODOC
     find_key(key_hash, criteria_hash)

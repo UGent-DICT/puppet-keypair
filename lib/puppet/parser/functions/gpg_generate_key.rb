@@ -1,13 +1,9 @@
-# rubocop:disable Documentation, Style/ClassAndModuleChildren
-
 module Puppet::Parser::Functions
   newfunction(:gpg_generate_key, type: :rvalue, doc: <<-EODOC
-
         The gpg_generate_key function generates a new RSA GPG keypair.
         Optional parameters:
          * key_length
          * uid
-
       EODOC
              ) do |args|
     params = args.shift || {}
@@ -40,14 +36,14 @@ module Puppet::Parser::Functions
         gpg.readlines.each do |line|
           # We just generated a single key in a new directory
           # so we don't need to track which uid belongs to which public key
-          if line =~ /^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+)/
+          if line =~ %r{^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+)}
             output['key_length'] = Regexp.last_match(1).to_i
             output['algo'] = Regexp.last_match(2).to_i
             output['keyid'] = Regexp.last_match(3)
-          elsif line =~ /^fpr:::::::::([0-9a-fA-F]+)/
+          elsif line =~ %r{^fpr:::::::::([0-9a-fA-F]+)}
             output['fingerprint'] = Regexp.last_match(1)
-          elsif line =~ /^uid:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):/
-            output['uid'] = Regexp.last_match(1).b.gsub(/((?:\\[0-9a-fA-F]{2})+)/) do |m|
+          elsif line =~ %r{^uid:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):}
+            output['uid'] = Regexp.last_match(1).b.gsub(%r{((?:\\[0-9a-fA-F]{2})+)}) do |m|
               [m.delete('\\')].pack('H*')
             end.force_encoding('UTF-8')
           end
