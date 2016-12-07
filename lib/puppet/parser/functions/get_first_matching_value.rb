@@ -1,5 +1,7 @@
-module Puppet::Parser::Functions
-  newfunction(:get_first_matching_value, type: :rvalue, doc: <<-EODOC
+module Puppet
+  module Parser
+    module Functions
+      newfunction(:get_first_matching_value, type: :rvalue, doc: <<-EODOC
     get_first_matching_value(key_hash, criteria_hash)
 
     Filters key_hash, returning the first (usually only) element to match
@@ -14,27 +16,30 @@ module Puppet::Parser::Functions
     returns:
     {a => 1, b => 2}
 
-  EODOC
-             ) do |args|
-    keys = args.shift || {}
-    criteria = args.shift || {}
+      EODOC
+      ) do |args|
 
-    keys = {} if keys == ''
+        keys = args.shift || {}
+        criteria = args.shift || {}
 
-    criteria = {} if criteria == ''
+        keys = {} if keys == ''
 
-    matching_keys = keys.keep_if do |_key, value|
-      keep = true
-      criteria.keys.each do |c|
-        keep &&= criteria[c] == value[c]
+        criteria = {} if criteria == ''
+
+        matching_keys = keys.keep_if do |_key, value|
+          keep = true
+          criteria.keys.each do |c|
+            keep &&= criteria[c] == value[c]
+          end
+          keep
+        end
+
+        if matching_keys.empty?
+          nil
+        else
+          matching_keys[matching_keys.keys[0]]
+        end
       end
-      keep
-    end
-
-    if matching_keys.empty?
-      nil
-    else
-      matching_keys[matching_keys.keys[0]]
     end
   end
 end
