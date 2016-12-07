@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/BlockLength
 Facter.add(:gpg_keys) do
   setcode do
     dir = '/etc/gpg_keys'

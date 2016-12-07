@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/BlockLength
 module Puppet
   module Parser
     module Functions
