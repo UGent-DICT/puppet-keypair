@@ -37,13 +37,6 @@ Facter.add(:gpg_keys) do
       end
     end
 
-    if keys.empty?
-      # Special case for first run:
-      # On first run, we may be running with `stringify_facts=true`
-      # This special case allows us to get past that first run
-      ''
-    else
-      keys
-    end
+    keys
   end
 end
