@@ -11,7 +11,10 @@
     {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">= 4.13.1 < 5.0.0"
-    }
+    },
+    {
+      "name": "dpcops-vrtlib",
+      "version_requirement": "~> 0.3.0 < 1.0.0"
   ],
   "requirements": [
     {

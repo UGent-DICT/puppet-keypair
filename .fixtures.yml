@@ -1,0 +1,6 @@
+---
+fixtures:
+  symlinks:
+    keypair: '#{source_dir}'
+  repositories:
+    vrtlib: 'ssh://git@git.vrt.be:7999/pup/dpcops-vrtlib.git'
