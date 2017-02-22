@@ -47,7 +47,7 @@ module Puppet
               elsif line =~ %r{^fpr:::::::::([0-9a-fA-F]+)}
                 output['fingerprint'] = Regexp.last_match(1)
               elsif line =~ %r{^uid:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):}
-                output['uid'] = Regexp.last_match(1).b.gsub(%r{((?:\\[0-9a-fA-F]{2})+)}) do |m|
+                output['uid'] = Regexp.last_match(1).clone.gsub(%r{((?:\\[0-9a-fA-F]{2})+)}) do |m|
                   [m.delete('\\')].pack('H*')
                 end.force_encoding('UTF-8')
               end
