@@ -2,12 +2,12 @@
 module Puppet
   module Parser
     module Functions
-      newfunction(:gpg_generate_key, type: :rvalue, doc: <<-EODOC
+      newfunction(:gpg_generate_key, type: :rvalue, doc: <<-FUNCTIONDOC
             The gpg_generate_key function generates a new RSA GPG keypair.
             Optional parameters:
             * key_length
             * uid
-        EODOC
+        FUNCTIONDOC
       ) do |args|
 
         params = args.shift || {}
@@ -18,6 +18,7 @@ module Puppet
           IO.popen(['gpg', '--homedir', dir, '--batch', '--gen-key'], 'r+') do |gpg|
             gpg.puts(
               [
+                '%no-protection',
                 'Key-Type: RSA',
                 'Key-Length: ' + (params['key_length'] || 2048).to_s,
                 'Key-Usage: sign',
@@ -68,3 +69,4 @@ module Puppet
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
