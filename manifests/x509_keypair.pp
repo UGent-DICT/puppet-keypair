@@ -1,6 +1,6 @@
 define keypair::x509_keypair () {
 
-  $existing_key = get_first_matching_value($::x509_keys, {
+  $existing_key = keypair::get_first_matching_value($::x509_keys, {
       'secret_present' => true,
       'basename'       => $name,
     })
