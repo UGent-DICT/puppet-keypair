@@ -1,13 +1,27 @@
 require 'spec_helper'
 
 describe 'gpg_generate_key' do
-  it 'does exist' do
-    expect(Puppet::Parser::Functions.function(:gpg_generate_key)).to eq('function_gpg_generate_key')
+  context 'handle parameters' do
+    it do
+      is_expected.to run.with_params(1024, 'UID')
+    end
+    it do
+      is_expected.to run.with_params('UID')
+    end
+    it do
+      is_expected.to run.with_params(512)
+    end
+    it do
+      is_expected.to run.with_params
+    end
+    it do
+      is_expected.to run.with_params('key_length' => 1024, 'uid' => 'UID')
+    end
   end
 
   context do
     let(:out) do
-      scope.function_gpg_generate_key(['uid' => 'Bla é€', 'key_length' => 1024])
+      subject.execute(1024, 'Bla é€')
     end
 
     it 'does return attributes' do
@@ -24,8 +38,8 @@ describe 'gpg_generate_key' do
   end
 
   context do
-    let('out') do
-      scope.function_gpg_generate_key(['key_length' => 16])
+    let(:out) do
+      subject.execute(16)
     end
 
     it 'does return attributes' do
