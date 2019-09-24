@@ -5,12 +5,55 @@
   "summary": "Generate key pairs",
   "license": "Apache-2.0",
   "source": "ssh://git@atlas.vrt.be:7999/pup/dpcops-keypair.git",
-  "project_page": null,
-  "issues_url": null,
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
       "version_requirement": ">= 4.13.1 < 5.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2019",
+        "10"
+      ]
     }
   ],
   "requirements": [
@@ -18,5 +61,8 @@
       "name": "puppet",
       "version_requirement": "> 4.0.0 < 5.0.0"
     }
-  ]
+  ],
+  "pdk-version": "1.12.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#1.12.0",
+  "template-ref": "tags/1.12.0-0-g55d9ae2"
 }
