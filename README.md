@@ -18,11 +18,10 @@ elsewhere.
 ## Development
 
 **Note on running tests:** Since we are preforming some gpg operations during
-the tests, your machine might run out of randomness. You can use the following 
+the tests, your machine might run out of randomness. You can use the following
 tool(s) to generate more entropy:
 
 * [rngd](https://github.com/nhorman/rng-tools): rng-tools contains a deamon to
   help with supplying additional entropy to /dev/random using hardware devices.
 * [haveged](http://www.issihosts.com/haveged/): A simple entropy daemon using
-  the HAVEGE algorithm
-
+  the HAVEGE algorithm.
