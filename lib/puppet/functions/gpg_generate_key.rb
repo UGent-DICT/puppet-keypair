@@ -1,3 +1,5 @@
+require File.expand_path('../../../puppet_x/keypair/gpg', __FILE__)
+
 # The gpg_generate_key function generates a new RSA GPG keypair.
 Puppet::Functions.create_function(:gpg_generate_key) do
   dispatch :gpg_generate_key_defaults do
@@ -68,21 +70,9 @@ Puppet::Functions.create_function(:gpg_generate_key) do
         ['gpg', '--homedir', dir, '--list-keys', '--with-fingerprint',
          '--with-colons', '--fixed-list-mode'],
       ) do |gpg|
-        gpg.readlines.each do |line|
-          # We just generated a single key in a new directory
-          # so we don't need to track which uid belongs to which public key
-          if line =~ %r{^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+)}
-            output['key_length'] = Regexp.last_match(1).to_i
-            output['algo'] = Regexp.last_match(2).to_i
-            output['keyid'] = Regexp.last_match(3)
-          elsif line =~ %r{^fpr:::::::::([0-9a-fA-F]+)}
-            output['fingerprint'] = Regexp.last_match(1)
-          elsif line =~ %r{^uid:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):}
-            output['uid'] = Regexp.last_match(1).clone.gsub(%r{((?:\\[0-9a-fA-F]{2})+)}) do |m|
-              [m.delete('\\')].pack('H*')
-            end.force_encoding('UTF-8')
-          end
-        end
+
+        keys = PuppetX::Keypair::GPG.parse_gpg_io(gpg)
+        output.merge!(keys.first) unless keys.empty?
       end
 
       IO.popen(['gpg', '--homedir', dir, '--armour', '--export', output['keyid']]) do |gpg|
