@@ -3,30 +3,26 @@ Facter.add(:x509_keys) do
     dir = '/etc/ssl/private'
 
     keys = {}
+    begin
+      if File.directory?(dir)
+        Dir.foreach(dir) do |filename|
+          next unless filename =~ %r{^([^.].*)\.(key|crt)}
+          basename = Regexp.last_match(1)
 
-    if File.directory?(dir)
-      Dir.foreach(dir) do |filename|
-        next unless filename =~ %r{^([^.].*)\.(key|crt)}
-        basename = Regexp.last_match(1)
+          keys[basename] = { 'basename' => basename } unless keys[basename]
 
-        keys[basename] = { 'basename' => basename } unless keys[basename]
+          keys[basename]['cert_present']   = true if Regexp.last_match(2) == 'crt'
+          keys[basename]['secret_present'] = true if Regexp.last_match(2) == 'key'
 
-        keys[basename]['cert_present']   = true if Regexp.last_match(2) == 'crt'
-        keys[basename]['secret_present'] = true if Regexp.last_match(2) == 'key'
-
-        if Regexp.last_match(2) == 'crt'
-          keys[basename]['cert'] = File.read(dir + '/' + filename)
+          if Regexp.last_match(2) == 'crt'
+            keys[basename]['cert'] = File.read(dir + '/' + filename)
+          end
         end
       end
+    rescue Errno::EACCES => ex
+      Facter.warn("x509_keys fact could not access #{dir}: permission denied.")
+      # can't access the file
     end
-
-    if keys.empty?
-      # Special case for first run:
-      # On first run, we may be running with `stringify_facts=true`
-      # This special case allows us to get past that first run
-      ''
-    else
-      keys
-    end
+    keys
   end
 end
