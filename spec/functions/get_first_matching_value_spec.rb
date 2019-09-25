@@ -30,7 +30,7 @@ describe 'keypair::get_first_matching_value' do
   context 'strict is false' do
     it 'does return first element when no criteria is set' do
       is_expected.to run.with_params(
-        { 'a' => { 'check' => 'mark' }, 'b' => {} }.freeze
+        { 'a' => { 'check' => 'mark' }, 'b' => {} }.freeze,
       ).and_return('check' => 'mark')
     end
 
@@ -38,21 +38,21 @@ describe 'keypair::get_first_matching_value' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark' }, 'b' => {} }.freeze,
         nil,
-        false
+        false,
       ).and_return('check' => 'mark')
     end
 
     it 'does return what matches' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark' }, 'b' => { 'check' => 'this' } }.freeze,
-        'check' => 'this'
+        'check' => 'this',
       ).and_return('check' => 'this')
     end
 
     it 'returns nil if there are no matches' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark' }, 'b' => { 'check' => 'this' } }.freeze,
-        'foo' => 'bar'
+        'foo' => 'bar',
       ).and_return(nil)
     end
   end
@@ -62,7 +62,7 @@ describe 'keypair::get_first_matching_value' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark' }, 'b' => {} }.freeze,
         nil,
-        true
+        true,
       ).and_return(nil)
     end
 
@@ -70,14 +70,14 @@ describe 'keypair::get_first_matching_value' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark', 'must' => 'match' }, 'b' => { 'check' => 'this', 'must' => 'match', 'extra' => 'stuff' } }.freeze,
         { 'check' => 'this', 'must' => 'match' },
-        true
+        true,
       ).and_return('check' => 'this', 'must' => 'match', 'extra' => 'stuff')
     end
     it 'returns nil if there are no matches' do
       is_expected.to run.with_params(
         { 'a' => { 'check' => 'mark' }, 'b' => { 'check' => 'this' } }.freeze,
         { 'foo' => 'bar' },
-        true
+        true,
       ).and_return(nil)
     end
   end
