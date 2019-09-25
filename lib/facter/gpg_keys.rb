@@ -18,20 +18,10 @@ Facter.add(:gpg_keys) do
 
           if Regexp.last_match(2) == 'pub'
             keys[basename]['public_key'] = File.read(dir + '/' + filename)
-            IO.popen(['gpg', '--with-fingerprint', '--with-colons', dir + '/' + filename]) do |gpg|
-              gpg.readlines.each do |line|
-                # We're reading in a single key
-                # so we don't need to track which uid belongs to which public key
-                if line =~ %r{^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+):[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):}
-                  keys[basename]['key_length'] = Regexp.last_match(1).to_i
-                  keys[basename]['algo'] = Regexp.last_match(2).to_i
-                  keys[basename]['keyid'] = Regexp.last_match(3)
-                  keys[basename]['uid'] = Regexp.last_match(4).b.gsub(%r{((?:\\[0-9a-fA-F]{2})+)}) do |m|
-                    [m.delete('\\')].pack('H*')
-                  end.force_encoding('UTF-8')
-                elsif line =~ %r{^fpr:::::::::([0-9a-fA-F]+)}
-                  keys[basename]['fingerprint'] = Regexp.last_match(1)
-                end
+            IO.popen(['gpg', '--with-fingerprint', '--with-colons', '--fixed-list-mode', dir + '/' + filename], err: [:child, :out]) do |gpg|
+              parsed_keys = PuppetX::Keypair::GPG.parse_gpg_io(gpg)
+              unless parsed_keys.empty?
+                keys[basename].merge!(parsed_keys.first)
               end
             end
           end
