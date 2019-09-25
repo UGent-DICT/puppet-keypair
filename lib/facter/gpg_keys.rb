@@ -1,7 +1,8 @@
-# rubocop:disable Metrics/BlockLength
+require File.expand_path('../../puppet_x/keypair/gpg', __FILE__)
+
 Facter.add(:gpg_keys) do
   setcode do
-    dir = '/etc/gpg_keys'
+    dir = PuppetX::Keypair::GPG.keydir
 
     keys = {}
     begin
