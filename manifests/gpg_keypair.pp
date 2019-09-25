@@ -12,14 +12,16 @@ define keypair::gpg_keypair (
   $uid = nil,
 ) {
 
-  include gpg # To make the parent directory
+  include keypair::gpg # To make the parent directory
+
+  $keydir = keypair::gpg_keydir()
 
   $existing_key = keypair::get_first_matching_value($::gpg_keys, {
       'secret_present' => true,
       'basename'       => $basename,
     })
 
-  $filename = "/etc/gpg_keys/${basename}"
+  $filename = "${keydir}/${basename}"
 
   if $existing_key {
     $key = $existing_key
