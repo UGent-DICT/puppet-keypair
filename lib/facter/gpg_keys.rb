@@ -12,7 +12,7 @@ Facter.add(:gpg_keys) do
           basename = Regexp.last_match(1)
 
           keys[basename] = { 'basename' => basename } unless keys[basename]
-
+          keys[basename]['keydir'] = dir
           keys[basename]['public_present'] = true if Regexp.last_match(2) == 'pub'
           keys[basename]['secret_present'] = true if Regexp.last_match(2) == 'sec'
 
