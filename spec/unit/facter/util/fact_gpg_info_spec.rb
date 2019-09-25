@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Facter::Util::Fact do
-  before do
+  before(:each) do
     Facter.clear
   end
 
@@ -16,7 +16,7 @@ describe Facter::Util::Fact do
       Home: ~/.gnupg
       Supported algorithms:
       Pubkey: RSA, RSA-E, RSA-S, ELG-E, DSA
-      Cipher: 3DES, CAST5, BLOWFISH, AES, AES192, AES256, TWOFISH, CAMELLIA128, 
+      Cipher: 3DES, CAST5, BLOWFISH, AES, AES192, AES256, TWOFISH, CAMELLIA128,
               CAMELLIA192, CAMELLIA256
       Hash: MD5, SHA1, RIPEMD160, SHA256, SHA384, SHA512, SHA224
       Compression: Uncompressed, ZIP, ZLIB, BZIP2
@@ -25,7 +25,7 @@ describe Facter::Util::Fact do
 
   let(:gpg2_version_output) do
     <<-VERSIONCODE.unindent
-      gpg (GnuPG) 2.2.17
+      gpg (GnuPG) 2.2.14
       libgcrypt 1.8.3
       Copyright (C) 2019 Free Software Foundation, Inc.
       License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -43,35 +43,57 @@ describe Facter::Util::Fact do
   end
 
   context 'when gpg is present in path' do
-    describe 'gpg 2.x' do
-      it do
-        Facter::Core::Execution.expects(:which).at_least(1)
-        Facter::Core::Execution.expects(:which).at_least(1).with('gpg').returns('/usr/local/bin/gpg')
-        Facter::Core::Execution.expects(:execute).at_least(1)
-        Facter::Core::Execution.expects(:execute).with("'/usr/local/bin/gpg --version'").returns(gpg2_version_output)
-        Facter.fact(:gpg_path).value.should eq('/usr/local/bin/gpg')
-        Facter.fact(:gpg_info).value.should eq('version' => '2.2.17', 'path' => '/usr/local/bin/gpg', 'libgcrypt' => '1.8.3')
-        Facter.fact(:gpg_version).value.should eq('2.2.17')
+    context 'gpg 2.x' do
+      before(:each) do
+        allow(Facter::Core::Execution).to receive(:which).and_call_original
+        allow(Facter::Core::Execution).to receive(:which).with('gpg').and_return('/usr/local/bin/gpg')
+        io = instance_double('IO')
+        allow(io).to receive(:readlines) { gpg2_version_output.split("\n") }
+        allow(IO).to receive(:popen).and_yield(io)
+      end
+
+      describe 'gpg_path' do
+        it { expect(Facter.fact(:gpg_path).value).to eq('/usr/local/bin/gpg') }
+      end
+      describe 'gpg_version' do
+        it { expect(Facter.fact(:gpg_version).value).to eq('2.2.14') }
+      end
+      describe 'gpg_info' do
+        it { expect(Facter.fact(:gpg_info).value).to eq('version' => '2.2.14', 'path' => '/usr/local/bin/gpg', 'libgcrypt' => '1.8.3') }
       end
     end
+
     describe 'gpg 1.x' do
-      it do
-        Facter::Core::Execution.expects(:which).at_least(1)
-        Facter::Core::Execution.expects(:which).at_least(1).with('gpg').returns('/usr/local/bin/gpg')
-        Facter::Core::Execution.expects(:execute).at_least(1)
-        Facter::Core::Execution.expects(:execute).with("'/usr/local/bin/gpg --version'").returns(gpg1_version_output)
-        Facter.fact(:gpg_path).value.should eq('/usr/local/bin/gpg')
-        Facter.fact(:gpg_info).value.should eq('version' => '1.4.10', 'path' => '/usr/local/bin/gpg' )
-        Facter.fact(:gpg_version).value.should eq('1.4.10')
+      before(:each) do
+        allow(Facter::Core::Execution).to receive(:which).and_call_original
+        allow(Facter::Core::Execution).to receive(:which).with('gpg').and_return('/usr/local/bin/gpg')
+
+        io = instance_double('IO')
+        allow(io).to receive(:readlines) { gpg1_version_output.split("\n") }
+        allow(IO).to receive(:popen).and_yield(io)
+      end
+
+      describe 'gpg_path' do
+        it { expect(Facter.fact(:gpg_path).value).to eq('/usr/local/bin/gpg') }
+      end
+      describe 'gpg_info' do
+        it { expect(Facter.fact(:gpg_info).value).to eq('version' => '1.4.10', 'path' => '/usr/local/bin/gpg') }
+      end
+      describe 'gpg_version' do
+        it { expect(Facter.fact(:gpg_version).value).to eq('1.4.10') }
       end
     end
   end
   context 'when gpg is not present' do
-    it do
-      Facter::Core::Execution.expects(:which).at_least(1).with('gpg').returns(nil)
-      Facter.fact(:gpg_info).value.should eq({})
-      Facter.fact(:gpg_path).value.should be_nil
-      Facter.fact(:gpg_version).value.should be_nil
+    before(:each) do
+      allow(Facter::Core::Execution).to receive(:which).and_call_original
+      allow(Facter::Core::Execution).to receive(:which).with('gpg').and_return(nil)
+    end
+
+    it 'nil version/path and empty gpg_info' do
+      expect(Facter.fact(:gpg_info).value).to eq({})
+      expect(Facter.fact(:gpg_path).value).to be_nil
+      expect(Facter.fact(:gpg_version).value).to be_nil
     end
   end
 end
