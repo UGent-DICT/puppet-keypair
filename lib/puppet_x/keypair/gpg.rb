@@ -17,7 +17,7 @@ module PuppetX
         keys = []
         current = {}
         io.readlines.each do |line|
-          if line =~ %r{^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+):[^:]*:[^:]*:[^:]*:[^:]*:([^:]*):}
+          if line =~ %r{^pub:[^:]*:(\d+):(\d+):([0-9a-fA-F]+):(?:[^:]*:)+([^:]*):}
             # check if we are starting a new key.
             if current['keyid'] && current['keyid'] != Regexp.last_match(3)
               keys << current
