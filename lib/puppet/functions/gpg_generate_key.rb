@@ -1,5 +1,5 @@
 # The gpg_generate_key function generates a new RSA GPG keypair.
-Puppet::Functions.create_function(:gpg_generate_key) do # rubocop:disable Metrics/BlockLength
+Puppet::Functions.create_function(:gpg_generate_key) do
   dispatch :gpg_generate_key_defaults do
   end
 
@@ -53,20 +53,20 @@ Puppet::Functions.create_function(:gpg_generate_key) do # rubocop:disable Metric
     # Store our input parameters in the result output hash
     output = { params: { key_length: key_length, uid: uid } }
 
-    Dir.mktmpdir do |dir| # rubocop:disable Metrics/BlockLength
+    Dir.mktmpdir do |dir|
       IO.popen(['gpg', '--homedir', dir, '--batch', '--gen-key'], 'r+') do |gpg|
         gpg.puts([
                    '%no-protection',
                    'Key-Type: RSA',
                    'Key-Length: ' + key_length.to_s,
                    'Key-Usage: sign',
-                   'Name-Real: ' + uid
+                   'Name-Real: ' + uid,
                  ])
       end
       raise Puppet::ParseError, 'Could not generate GPG key' unless $CHILD_STATUS.success?
       IO.popen(
         ['gpg', '--homedir', dir, '--list-keys', '--with-fingerprint',
-         '--with-colons', '--fixed-list-mode']
+         '--with-colons', '--fixed-list-mode'],
       ) do |gpg|
         gpg.readlines.each do |line|
           # We just generated a single key in a new directory

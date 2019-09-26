@@ -1,3 +1,11 @@
+# @summary Find a hash value depending on several criteria.
+#
+# @param source Source hash
+# @param criteria Criteria hash
+# @param strict Enable strict matching. When strict matching is enabled
+#   and you have no criteria, no elements will be returned. Otherwise, the
+#   first element is returned.
+# @return [Optional[Hash]] First element in `$source` that matches all the criteria.
 function keypair::get_first_matching_value(
   Variant[Undef, Hash, Enum['']] $source = {},
   Variant[Undef, Hash, Enum['']] $criteria = {},

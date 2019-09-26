@@ -1,5 +1,5 @@
 # The gpg_generate_key function generates a new X.509 (SSL) RSA keypair.
-Puppet::Functions.create_function(:x509_generate_key) do # rubocop:disable Metrics/BlockLength
+Puppet::Functions.create_function(:x509_generate_key) do
   dispatch :x509_generate_key_defaults do
   end
 
@@ -55,7 +55,7 @@ Puppet::Functions.create_function(:x509_generate_key) do # rubocop:disable Metri
     # No need for an extra params sub-hash here.
     output = {
       'CN' => cn,
-      'key_length' => key_length
+      'key_length' => key_length,
     }
 
     Dir.mktmpdir do |dir|

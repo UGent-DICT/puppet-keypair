@@ -1,11 +1,5 @@
 require 'spec_helper'
 
-class String
-  def unindent
-    gsub(%r{^#{scan(%r{^\s*}).min_by(&:length)}}, '')
-  end
-end
-
 describe Facter::Util::Fact do
   before do
     Facter.clear

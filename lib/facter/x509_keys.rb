@@ -19,7 +19,7 @@ Facter.add(:x509_keys) do
           end
         end
       end
-    rescue Errno::EACCES => ex
+    rescue Errno::EACCES
       Facter.warn("x509_keys fact could not access #{dir}: permission denied.")
       # can't access the file
     end
