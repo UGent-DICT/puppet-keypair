@@ -14,7 +14,7 @@ describe PuppetX::Keypair::GPG do
     end
   end
 
-  describe 'parse a single key (gpg1)' do
+  describe 'a single key in a file (gpg1)' do
     let(:output) do
       <<-OUTPUT.unindent
         pub:-:2048:1:51A967C4EA88C58F:1569404883:::-:Aptly repo server signing key:
@@ -39,7 +39,34 @@ describe PuppetX::Keypair::GPG do
     end
   end
 
-  describe 'parse a single key (gpg2)' do
+  describe 'single key in a file (gpg2)' do
+    let(:output) do
+      <<-OUTPUT.unindent
+        gpg: WARNING: no command supplied.  Trying to guess what you mean ...
+        pub:-:2048:1:E57A76F96110C25F:1569249893:::-:
+        fpr:::::::::4112E0391394060387E5698DE57A76F96110C25F:
+        uid:::::::::Aptly repository signing key:
+      OUTPUT
+    end
+    let(:parsed) do
+      [{
+        'algo' => 1,
+        'key_length' => 2048,
+        'keyid' => 'E57A76F96110C25F',
+        'uid' => 'Aptly repository signing key',
+        'fingerprint' => '4112E0391394060387E5698DE57A76F96110C25F',
+      }]
+    end
+
+    it 'returns a single key' do
+      io = instance_double('IO')
+      allow(io).to receive(:readlines) { output.split("\n") }
+
+      expect(described_class.parse_gpg_io(io)).to eq(parsed)
+    end
+  end
+
+  describe 'single key in a keyring (gpg2)' do
     let(:output) do
       <<-OUTPUT.unindent
         gpg: WARNING: unsafe permissions on homedir '/tmp/spec/fixtures/certificates'
@@ -68,7 +95,7 @@ describe PuppetX::Keypair::GPG do
     end
   end
 
-  describe 'parse multiple key (gpg2)' do
+  describe 'multiple keys in a keyring (gpg2)' do
     let(:output) do
       <<-OUTPUT.unindent
         gpg: WARNING: unsafe permissions on homedir '/tmp/spec/fixtures/certificates'
