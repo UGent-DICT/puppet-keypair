@@ -12,7 +12,7 @@ Facter.add(:gpg_info) do
     gpg_path = Facter.value(:gpg_path)
     if gpg_path
       gpg_info['path'] = gpg_path
-      output = Facter::Core::Execution.execute("'#{gpg_path} --version'")
+      output = Facter::Core::Execution.execute("#{gpg_path} --version")
       output.split("\n").each do |line|
         if line =~ %r{^gpg \(GnuPG\) (\d.*)$}
           gpg_info['version'] = Regexp.last_match(1)
